@@ -1,0 +1,45 @@
+SIMULATE 10
+
+! Smolt batch size:
+INPUT X$batch
+LET X$merde=100
+rogn CAPACITY 10
+merde CAPACITY 10
+Brboat CAPACITY 10
+slakt CAPACITY 10
+frakt CAPACITY 10
+	GENERATE 100,10
+	ENTER rogn,Q	! start roe
+	ADVANCE 390,90	! From roe to smolt
+	LEAVE rogn
+	PRINT 'roe batch done:',cl
+	ENTER Brboat,Q	! Well boat acquires smolt
+	ADVANCE 2,0.5	! shipping og handling for transfer
+	LEAVE Brboat
+	PRINT 'Well boat done:',cl
+	ENTER merde,Q	! Smolt transferred to facility
+	LET+ x$merde,x$batch
+	GRAPH cl,x$merde
+	ADVANCE 540+20*fn$snorm	! Development phase smolt to salmon  (Loc: -8,+2)
+	LEAVE merde	! salmon fully grown
+	PRINT 'Salmon complete:',cl
+	LET- x$merde,x$batch
+	GRAPH cl,x$merde
+	ADVANCE 2,0.5	! transport to slaughtering facility
+	PRINT 'Arrival slaugth:',cl
+	ENTER slakt,Q
+	GOTO toss,0.01	! Probability of diseases in batch  (Loc: -6,+2)
+	SEIZE slay,Q	! slaughter time salmon
+	ADVANCE 0.001
+	RELEASE slay
+	LEAVE slakt
+	ADVANCE 0.5	! Make salmon ready for transport
+	PRINT 'For distribution:',cl
+	TERMINATE 
+toss	TERMINATE 	! (Loc: +0,+2)
+
+	GENERATE 1825	! (Loc: +0,+0)
+	TERMINATE 1
+
+START 1
+END
