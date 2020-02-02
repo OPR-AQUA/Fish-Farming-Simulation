@@ -1,7 +1,6 @@
 
-def(hei):
+def (hei):
   if hei == "2+2":
-    System.outline("Hello world")
-  
-  
- Dette suger ass!
+    print("Hello world")
+  else:
+    print("Dette suger ass!")
