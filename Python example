@@ -1,6 +1,0 @@
-
-def (hei):
-  if hei == "2+2":
-    print("Hello world")
-  else:
-    print("Jaja du prøvde hvertfall")
