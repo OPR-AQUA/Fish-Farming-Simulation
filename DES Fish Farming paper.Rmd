@@ -1,0 +1,88 @@
+---
+title: "A General Simulation Architecture for the Fish Farming Production Process"
+author: "Tellef Solberg, NHH & Øyvind L. Brunstad, NMBU"
+date: "07/02/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1. Introduction
+
+The Aquaculture industry is an industry where the production process from broodstock to distribution and sales of fully grown fish is sequential and chronological. This allows for several optimization techniques from process mining and operations research for increasing the performance of the systems. Discrete Event Simulation (DES) is a widely used analysis-technique in such sequential production systems, and it allows for replicating a production process in a virtual environment and then running scenario analyses and determining the effects of different alterations to the system. 
+
+The purpose of this study is to create a general simulation model for a fish farming production process. The simulation is not specific to any particular operation of a particular company, however, the purpose is that the data inputs can be altered for the operation that is being investigated. A great emphasis is put on making the model simplistic and easy to interpret and edit for alterations for the specific system to be analyzed. 
+
+Using the block-based simulation programming language aGPSS, a simulation architecture is created and several alterations are made in order to highlight the behaviour of key operational metrics. These metrics will be covered in the upcoming chapter. 
+
+
+## 2. Review of the production process
+
+Using data from laksefakta (2015), the following generic production process is created as seen in the flowchart figure 1.
+
+![Production process from Roe/egg production until distribution and sales](C:\Users\telle\Desktop\production process.png)
+
+
+Note that these figures are all rough inputs into the simulation, and these times would vary with different production equipment, routines, layouts etc. for the specific operation. The purpose of these figures is to have rough inputs into the simulation model. The Appendix contains simulation runs for different alterations for the processing times. 
+
+
+## 3. The simulation model architecture
+
+
+For simulation to be an effective analysis tool, there should be one or more stochastic elements. Therefore we make the following assumptions in the inital simulation model:
+
+1. The roe/egg production until smolt is uniformly distributed ~ (390,90)
+2. Wellboat transportation to the salmon cage facility is uniformly distributed ~ (2,0.5)
+3. The feed fish process in the salmon cages is normally distributed ~ (540, 20)
+4. The remainding processes are kept deterministic
+
+The simulation architecture can be seen below in figure 2 and the corresponding source code can be found in the appendix.
+
+![Simulation Architecture in aGPSS](C:\Users\telle\OneDrive\Projects for GitHub\Fish-farming simulation\Architecture.PNG)
+
+The simulation architecture model contains two separate segments:
+
+1. The sequential production process (starting from GENERATE 100,10)
+2. The simulation clock of 5 years (starting from GENERATE 1825)
+
+Also note that the longest processing time is by the salmon cage with the normally distributed ~ (540, 20). The levers for dealing with this bottleneck is intuitively to increase the capacity of this station and/or decrease the processing time for the salmons. However, capacity is the lever we acctually can control. Also before the wellboats transport the salmon to the slaughtering facility, there is a given probability that some fish does not fill the requirements for distribution and sales, and they are hence thrown away (as seen in the last terminate block in the production segment)
+
+
+## 4. Interpretation of the simulation results
+
+From the block statistics obtained in the simulation, we obtain the following results. 
+
+![Block statistics](C:\Users\telle\Desktop\Capture1.PNG)
+
+The block statistics tells us that the simulation ran for 1825 days, and that 5 production units are currently in the salmon cage. All in all, 9 production units finished the whole production process during the 5 years simulation period. Note that the PRINT statements from the program gives us results from when an activity is executed and the corresponding time. 
+
+## 5. Further research
+
+From this rather short report, there are several points to be considered going forward:
+
+1. How does the simulation architecture perform when applying it to a real production operation?
+2. How many alterations does the simulation architecture need when applied to a real production operation?
+3. How much extra detail does the simulation architecture need for obtaining a suffiecient virtual replication?
+
+
+
+## Source code
+
+![Source code from simulation](C:\Users\telle\Desktop\Capture2.PNG)
+
+
+## References
+
+Laksefakta. (2015, Oktober 26). Bærekraftig laksefôr. Hentet Februar 10, 2016 fra Laksefakta: http://www.laksefakta.no/Norsk-havbruk/Dette-spiser-laksen/Les-mer-om/B%C3%A6rekraftig-laksef%C3%B4r
+
+Laksefakta. (2015, August 25). Fra rogn til mat. Hentet fra Laksefakta: http://www.laksefakta.no/Norsk-havbruk/Laksens-livssyklus/Les-mer-om/Fra-rogn-til-mat
+
+
+https://github.com/OprSim/Fish-Farming-Simulation
+
+
+
+
+
